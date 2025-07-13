@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:con2g12/models/user_model.dart';
+import 'package:con2g12/pages/user_info_page.dart';
 import 'package:flutter/material.dart';
 
 class FutureListPage extends StatelessWidget {
@@ -32,9 +33,24 @@ class FutureListPage extends StatelessWidget {
               return ListView.builder(
                 itemCount: users.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(users[index].name),
-                    subtitle: Text(users[index].lastname),
+                  return Container(
+                    margin: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.cyan,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    child: ListTile(
+                      title: Text(users[index].name),
+                      subtitle: Text(users[index].lastname),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserInfoPage(users[index]),
+                          ),
+                        );
+                      },
+                    ),
                   );
                 },
               );
