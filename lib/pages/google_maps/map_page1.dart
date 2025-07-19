@@ -9,6 +9,8 @@ class MapPage1 extends StatefulWidget {
 
 class _MapPage1State extends State<MapPage1> {
   Position? currentPosition;
+  Set<Marker> _markers = {};
+
   Future<void> getPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -39,6 +41,15 @@ class _MapPage1State extends State<MapPage1> {
       );
       currentPosition = position;
       print(position);
+      _markers.add(
+        Marker(
+          markerId: MarkerId(_markers.length.toString()),
+          position: LatLng(
+            currentPosition!.latitude,
+            currentPosition!.longitude,
+          ),
+        ),
+      );
       setState(() {});
     } catch (e) {
       print("eerror: $e");
@@ -66,14 +77,25 @@ class _MapPage1State extends State<MapPage1> {
                 ),
                 zoom: 12,
               ),
-              markers: {
-                Marker(
-                  markerId: MarkerId("1"),
-                  position: LatLng(
-                    currentPosition!.latitude,
-                    currentPosition!.longitude,
+              markers: _markers,
+              //  {
+              //   Marker(
+              //     markerId: MarkerId("1"),
+              //     position: LatLng(
+              //       currentPosition!.latitude,
+              //       currentPosition!.longitude,
+              //     ),
+              //   ),
+              // },
+              onTap: (LatLng position) {
+                _markers.add(
+                  Marker(
+                    markerId: MarkerId(_markers.length.toString()),
+                    position: position,
                   ),
-                ),
+                );
+                setState(() {});
+                print(position);
               },
             ),
     );
