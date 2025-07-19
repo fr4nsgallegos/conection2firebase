@@ -10,6 +10,25 @@ class MapPage1 extends StatefulWidget {
 class _MapPage1State extends State<MapPage1> {
   Position? currentPosition;
   Set<Marker> _markers = {};
+  BitmapDescriptor? _customMarker;
+
+  Future<void> _setCustomMarker() async {
+    _customMarker = await BitmapDescriptor.fromAssetImage(
+      ImageConfiguration(size: Size(100, 100)),
+      "assets/markers/orange.png",
+    );
+    _markers.add(
+      Marker(
+        markerId: MarkerId(_markers.length.toString()),
+        position: LatLng(currentPosition!.latitude, currentPosition!.longitude),
+        icon: _customMarker!,
+        infoWindow: InfoWindow(
+          title: "marcador n: ${_markers.length}",
+          snippet: "Esta es mi posición",
+        ),
+      ),
+    );
+  }
 
   Future<void> getPosition() async {
     bool serviceEnabled;
@@ -40,16 +59,21 @@ class _MapPage1State extends State<MapPage1> {
         desiredAccuracy: LocationAccuracy.high,
       );
       currentPosition = position;
+      _setCustomMarker();
       print(position);
-      _markers.add(
-        Marker(
-          markerId: MarkerId(_markers.length.toString()),
-          position: LatLng(
-            currentPosition!.latitude,
-            currentPosition!.longitude,
-          ),
-        ),
-      );
+      // _markers.add(
+      //   Marker(
+      //     markerId: MarkerId(_markers.length.toString()),
+      //     position: LatLng(
+      //       currentPosition!.latitude,
+      //       currentPosition!.longitude,
+      //     ),
+      //     infoWindow: InfoWindow(
+      //       title: "marcador n: ${_markers.length}",
+      //       snippet: "Esta es mi posición",
+      //     ),
+      //   ),
+      // );
       setState(() {});
     } catch (e) {
       print("eerror: $e");
@@ -78,24 +102,20 @@ class _MapPage1State extends State<MapPage1> {
                 zoom: 12,
               ),
               markers: _markers,
-              //  {
-              //   Marker(
-              //     markerId: MarkerId("1"),
-              //     position: LatLng(
-              //       currentPosition!.latitude,
-              //       currentPosition!.longitude,
-              //     ),
-              //   ),
-              // },
+
               onTap: (LatLng position) {
                 _markers.add(
                   Marker(
+                    icon: _customMarker!,
+                    infoWindow: InfoWindow(
+                      title: "Marcador n: ${_markers.length}",
+                      snippet: "Marcador más info",
+                    ),
                     markerId: MarkerId(_markers.length.toString()),
                     position: position,
                   ),
                 );
                 setState(() {});
-                print(position);
               },
             ),
     );
