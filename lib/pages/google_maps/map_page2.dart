@@ -1,3 +1,4 @@
+import 'package:con2g12/pages/google_maps/model_maps/place_model.dart';
 import 'package:con2g12/pages/google_maps/utils/home_controller.dart';
 import 'package:custom_info_window/custom_info_window.dart';
 import 'package:flutter/material.dart';
@@ -30,21 +31,46 @@ class _MapPage2State extends State<MapPage2> {
     );
 
     //MÉTODO 1
-    posiciones.forEach((pos) {
+    places.forEach((place) {
       auxMarkers.add(
         Marker(
-          markerId: MarkerId("${pos.latitude}-${pos.longitude}"),
-          position: pos,
+          markerId: MarkerId(place.id.toString()),
+          position: place.position,
           icon: iconMarker,
           onTap: () {
             _customInfoWindowController.addInfoWindow!(
               Container(
-                height: 200,
-                width: 200,
-                decoration: BoxDecoration(color: Colors.red),
-                child: Text("Hpoña"),
+                padding: EdgeInsets.all(8),
+                // height: 200,
+                // width: 200,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(25),
+                ),
+                child: Row(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadiusGeometry.circular(15),
+                      child: Image.network(
+                        fit: BoxFit.cover,
+                        place.imageUrl,
+                        width: 50,
+                        height: 80,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Container(
+                      width: 120,
+                      height: 110,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [Text(place.name), Text(place.services)],
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              pos,
+              place.position,
             );
             setState(() {});
           },
