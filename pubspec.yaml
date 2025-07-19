@@ -36,6 +36,7 @@ dependencies:
   geolocator: ^14.0.2
   logger: ^2.6.0
   custom_info_window: ^1.0.1
+  provider: ^6.1.5
   flutter:
     sdk: flutter
 
